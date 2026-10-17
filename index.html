@@ -188,7 +188,7 @@ footer a:hover { color: var(--accent); }
     <li><a href="#news">News</a></li>
     <li><a href="SC_CV.pdf" download class="nav-cv">⬇ CV</a></li>
   </ul>
-  <button class="nav-toggle" onclick="document.getElementById('navLinks').classList.toggle('open')" aria-label="Toggle menu">☰</button>
+  <button class="nav-toggle" type="button" aria-label="Toggle menu" aria-controls="navLinks" aria-expanded="false">☰</button>
 </nav>
 
 <div class="hero">
@@ -787,9 +787,20 @@ function renderPubs() {
 }
 
 // Nav toggle
-document.querySelector('.nav-toggle').addEventListener('click', function() {
-  document.getElementById('navLinks').classList.toggle('open');
-});
+(function() {
+  var btn = document.querySelector('.nav-toggle');
+  var links = document.getElementById('navLinks');
+  btn.addEventListener('click', function() {
+    var open = links.classList.toggle('open');
+    btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+  });
+  links.querySelectorAll('a').forEach(function(a) {
+    a.addEventListener('click', function() {
+      links.classList.remove('open');
+      btn.setAttribute('aria-expanded', 'false');
+    });
+  });
+})();
 
 // Initial render
 renderPubs();
